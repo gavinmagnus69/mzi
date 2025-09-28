@@ -4,7 +4,7 @@ class RebbeCypher:
     def __init__(self, bits=42):
         self.open_key, self.close_key = self.generate_key(bits)
 
-        # гарантируем, что p != q
+        # p != q
         while self.close_key[0] == self.close_key[1]:
             self.open_key, self.close_key = self.generate_key(bits)
 
@@ -75,7 +75,7 @@ class RebbeCypher:
         x, y = self.find_Yp_Yq(p, q)
 
         while x * p + y * q != 1:
-            x, y = self.find_Yp_Yq(p, q) # решаем расширенный алгоритм Евлкида(коэффициенты находим) 1 = gcd(p,q) == 1 всегда(простые числа)
+            x, y = self.find_Yp_Yq(p, q) #  1 = gcd(p,q) == 1 always ;simple; numbers
 
         r = self.mod((p + 1) // 4, c, p)
         s = self.mod((q + 1) // 4, c, q)
@@ -85,7 +85,7 @@ class RebbeCypher:
         r4 = self.open_key - r3
 
         for item in (r1, r2, r3, r4):
-            if 0 <= item < 0x110000:  # 0x10FFFF + 1, максимальный код символа в Python
+            if 0 <= item < 0x110000:  
                 return chr(item)
         return "�"
 
