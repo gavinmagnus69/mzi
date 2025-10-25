@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stddef.h": "c",
+        "streebog.h": "c",
+        "sha1.h": "c",
+        "unistd.h": "c"
+    }
+}
