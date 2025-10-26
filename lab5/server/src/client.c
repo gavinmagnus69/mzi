@@ -19,7 +19,7 @@ int main() {
     int sock = 0;
     struct sockaddr_in serv_addr;
     char buffer[1024] = {0};
-    const char* msg = "SHA1 Hello from client!";
+    const char* msg = "SHA1  ";
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
         perror("Socket creation error");
@@ -39,12 +39,13 @@ int main() {
         perror("Connection failed");
         exit(EXIT_FAILURE);
     }
-
-    send(sock, msg, strlen(msg), 0);
-    int readed = read(sock, buffer, sizeof(buffer));
-    printf("The value is: %d \n", readed);
-    // printf("Server reply: %s\n", buffer);
-    print_hashing_context(buffer, readed);
+    while (1) {
+        send(sock, msg, strlen(msg), 0);
+        int readed = read(sock, buffer, sizeof(buffer));
+        printf("The value is: %d \n", readed);
+        // printf("Server reply: %s\n", buffer);
+        print_hashing_context(buffer, readed);
+    }
     close(sock);
     return 0;
 }
