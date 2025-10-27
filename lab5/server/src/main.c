@@ -8,8 +8,6 @@
 
 
 #include "server.h"
-
-
 #include "sha.h"
 #include "streebog.h"
 

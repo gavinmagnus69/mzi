@@ -25,7 +25,7 @@ char g_buffer[1024] = {0};
 
 typedef struct HashingContext {
     enum Hash_Type hash_type;
-    char* text_to_hash;
+    const char* text_to_hash;
 } HashingContext;
 
 
@@ -59,7 +59,7 @@ enum Hash_Type get_hash_type_from_string(const char* token) {
 struct HashingContext tokenize_buffer2(char* buffer) {
     struct HashingContext ctx;
     ctx.hash_type = Unknown_Hash_Type;
-    ctx.text_to_hash = NULL;
+    ctx.text_to_hash = "";
     int current_index = 0;
     while (1) {
         if (buffer[current_index] == 0) {
@@ -72,7 +72,7 @@ struct HashingContext tokenize_buffer(char* buffer) {
     const char* delimiters = " \t\r\n";
     struct HashingContext ctx;
     ctx.hash_type = Unknown_Hash_Type;
-    ctx.text_to_hash = NULL;
+    ctx.text_to_hash = "";
     if (buffer == NULL) {
         return ctx;
     }
@@ -211,14 +211,16 @@ void print_hashing_context(HashResult* ctx) {
 struct HashResult perform_hashing(HashingContext* ctx) {
     struct HashResult result;
     result.hash_type = ctx->hash_type;
+    const char* text_to_hash = ctx->text_to_hash != NULL ? ctx->text_to_hash : "";
+    size_t text_length = strlen(text_to_hash);
     if (ctx->hash_type == SHA1) {
         result.digest_length = SHA1_DIGEST_LENGTH;
         result.digest = (uint8_t*)malloc(SHA1_DIGEST_LENGTH * sizeof(uint8_t));
-        sha1_hash(ctx->text_to_hash, strlen(ctx->text_to_hash), result.digest);
+        sha1_hash((const uint8_t*)text_to_hash, text_length, result.digest);
     } else if (ctx->hash_type == STREEBOG512) {
         result.digest_length = STREEBOG_DIGEST_LENGTH;
         result.digest = (uint8_t*)malloc(STREEBOG_DIGEST_LENGTH * sizeof(uint8_t));
-        streebog_hash(ctx->text_to_hash, strlen(ctx->text_to_hash), result.digest);
+        streebog_hash((const uint8_t*)text_to_hash, text_length, result.digest);
     } else {
         result.digest = NULL;
         result.digest_length = 0;
@@ -228,8 +230,8 @@ struct HashResult perform_hashing(HashingContext* ctx) {
 }
 
 
-void print_requested_text(char* text) {
-    printf("Requested text: %s\n", text);
+void print_requested_text(const char* text) {
+    printf("Requested text: %s\n", text != NULL ? text : "");
 }
 
 
